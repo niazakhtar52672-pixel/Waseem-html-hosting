@@ -302,6 +302,10 @@ textarea { resize: vertical; font-family: 'SFMono-Regular', Consolas, monospace;
 }
 .result .loading { color: var(--muted); }
 
+.connect-footer { margin-top: 34px; text-align: center; }
+.connect-footer .eyebrow { margin-bottom: 10px; }
+.connect-footer .link-list { text-align: left; }
+
 .recent { margin-top: 30px; }
 .recent.standalone { margin-top: 8px; }
 .recent h3 { font-family: 'Baloo 2', sans-serif; font-size: 16px; margin-bottom: 10px; }
