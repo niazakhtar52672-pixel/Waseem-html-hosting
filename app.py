@@ -15,7 +15,7 @@ DB_FILE = os.path.join(BASE_DIR, "files_db.json")
 
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static', static_url_path='/static')
 app.config["MAX_CONTENT_LENGTH"] = 100 * 1024 * 1024  # 100 MB per upload
 
 # ---------------------------------------------------------------------------
