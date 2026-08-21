@@ -134,7 +134,13 @@ def upload():
 
     slug = uuid.uuid4().hex[:10]
     stored_name = f"{slug}.{ext}"
-    f.save(os.path.join(UPLOAD_DIR, stored_name))
+    full_path = os.path.join(UPLOAD_DIR, stored_name)
+
+    try:
+        os.makedirs(UPLOAD_DIR, exist_ok=True)
+        f.save(full_path)
+    except OSError as e:
+        return jsonify({"ok": False, "error": f"Server could not save the file: {e}"}), 500
 
     record = {
         "id": slug,
@@ -142,7 +148,7 @@ def upload():
         "stored_name": stored_name,
         "category": category,
         "ext": ext,
-        "size": os.path.getsize(os.path.join(UPLOAD_DIR, stored_name)),
+        "size": os.path.getsize(full_path),
         "uploaded_at": datetime.utcnow().isoformat() + "Z",
         "url": url_for("serve_file", stored_name=stored_name, _external=False),
     }
@@ -162,8 +168,14 @@ def host_html():
 
     slug = uuid.uuid4().hex[:10]
     stored_name = f"{slug}.html"
-    with open(os.path.join(UPLOAD_DIR, stored_name), "w", encoding="utf-8") as fh:
-        fh.write(code)
+    full_path = os.path.join(UPLOAD_DIR, stored_name)
+
+    try:
+        os.makedirs(UPLOAD_DIR, exist_ok=True)
+        with open(full_path, "w", encoding="utf-8") as fh:
+            fh.write(code)
+    except OSError as e:
+        return jsonify({"ok": False, "error": f"Server could not save the page: {e}"}), 500
 
     record = {
         "id": slug,
@@ -171,7 +183,7 @@ def host_html():
         "stored_name": stored_name,
         "category": "code",
         "ext": "html",
-        "size": os.path.getsize(os.path.join(UPLOAD_DIR, stored_name)),
+        "size": os.path.getsize(full_path),
         "uploaded_at": datetime.utcnow().isoformat() + "Z",
         "url": url_for("serve_file", stored_name=stored_name, _external=False),
     }
